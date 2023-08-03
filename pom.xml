@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<scm>
-		<developerConnection>{{scm.developerConnection}}</developerConnection>
+		<developerConnection>scm:git:ssh://git.herb.herbmarshall.com/repository/util/fault.library</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -13,8 +13,8 @@
 		<version> 1.8 </version>
 	</parent>
 
-	<artifactId>{{artifactId}}</artifactId>
-	<version>{{version}}</version>
+	<artifactId>fault.library</artifactId>
+	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
