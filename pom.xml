@@ -18,9 +18,17 @@
 	<packaging>jar</packaging>
 
 	<properties>
+
+		<standardOut.version>   1.0   </standardOut.version>
+
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.herbmarshall</groupId>
+			<artifactId>standardOut.library</artifactId>
+			<version>${standardOut.version}</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
