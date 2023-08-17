@@ -14,21 +14,34 @@
 	</parent>
 
 	<artifactId>fault.library</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
 
-		<standardOut.version>   1.0   </standardOut.version>
+		<util.major>   1   </util.major>
+
+		<standardOut.version>   ${util.major}.5   </standardOut.version>
+
+		<junit.version>   5.9.3   </junit.version>
 
 	</properties>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>com.herbmarshall</groupId>
 			<artifactId>standardOut.library</artifactId>
 			<version>${standardOut.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<repositories>
