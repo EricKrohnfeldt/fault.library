@@ -24,6 +24,8 @@ pipeline {
 						returnStatus: true
 					)
 				}
+				sh "echo Release Candidate: $releaseCandidate"
+				sh "[ true != $releaseCandidate ] && git log --all --decorate --oneline --graph | head -n50 || true"
 			}
 		}
 		stage( 'Confirm merge' ) {
