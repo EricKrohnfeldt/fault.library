@@ -5,22 +5,25 @@ import com.herbmarshall.standardPipe.Standard;
 import java.io.PrintStream;
 import java.util.Objects;
 
-/** Utility to build error message containers. */
-public final class Fault {
+/**
+ * Utility to build error message containers.
+ * @param <E> The error type
+ */
+public final class Fault<E extends Throwable> {
 
 	static final String TO_STRING_TEMPLATE = "(%s) %s";
 
-	private final Class<? extends Throwable> type;
+	private final Class<E> type;
 	private final String message;
 
 	/** Create instance. */
-	public Fault( Class<? extends Throwable> type, String message ) {
+	public Fault( Class<E> type, String message ) {
 		this.type = requireNonNull( type, "type" );
 		this.message = requireNonNull( message, "message" );
 	}
 
 	/** @return the generated error type. */
-	public Class<? extends Throwable> getType() {
+	public Class<E> getType() {
 		return type;
 	}
 
@@ -33,7 +36,7 @@ public final class Fault {
 	 * Will print the error type and message to {@link Standard#out}.
 	 * @return Self reference
 	 */
-	public Fault print() {
+	public Fault<E> print() {
 		return print( Standard.out.toStream() );
 	}
 
@@ -42,7 +45,7 @@ public final class Fault {
 	 * @return Self reference
 	 * @throws NullPointerException if {@code stream} is null.
 	 */
-	public Fault print( PrintStream stream ) {
+	public Fault<E> print( PrintStream stream ) {
 		requireNonNull( stream, "stream" ).println( this );
 		return this;
 	}
@@ -54,7 +57,7 @@ public final class Fault {
 	 * @throws AssertionError if the type or message do not match
 	 * @see Standard#err
 	 */
-	public Fault validate( Throwable error ) {
+	public Fault<E> validate( Throwable error ) {
 		return validate( error, Standard.err.toStream() );
 	}
 
@@ -65,7 +68,7 @@ public final class Fault {
 	 * @throws AssertionError if either type or message do not match
 	 * @throws NullPointerException if either {@code error} or {@code stream} are null.
 	 */
-	public Fault validate( Throwable error, PrintStream stream ) {
+	public Fault<E> validate( Throwable error, PrintStream stream ) {
 		requireNonNull( error, "error" );
 		requireNonNull( stream, "stream" );
 		try {

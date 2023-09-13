@@ -38,7 +38,7 @@ class FaultTest {
 			String message = randomString();
 			// Act
 			try {
-				new Fault( null, message );
+				new Fault<>( null, message );
 				Assertions.fail();
 			}
 			// Assert
@@ -53,10 +53,9 @@ class FaultTest {
 		@Test
 		void message_null() {
 			// Arrange
-			Class<? extends Throwable> type = randomType();
 			// Act
 			try {
-				new Fault( type, null );
+				new Fault<>( randomType(), null );
 				Assertions.fail();
 			}
 			// Assert
@@ -74,9 +73,9 @@ class FaultTest {
 	void getErrorType() {
 		// Arrange
 		Class<? extends Throwable> type = randomType();
-		Fault fault = new Fault( type, randomString() );
+		Fault<?> fault = new Fault<>( type, randomString() );
 		// Act
-		Class<? extends Throwable> output = fault.getType();
+		Class<?> output = fault.getType();
 		// Assert
 		Assertions.assertSame( type, output );
 	}
@@ -85,7 +84,7 @@ class FaultTest {
 	void getMessage() {
 		// Arrange
 		String message = randomString();
-		Fault fault = new Fault( randomType(), message );
+		Fault<?> fault = new Fault<>( randomType(), message );
 		// Act
 		String output = fault.getMessage();
 		// Assert
@@ -101,15 +100,15 @@ class FaultTest {
 		}
 
 		@Test
-		void $happyPath() {
+		void happyPath() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			Standard.out.override( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			// Act
-			Fault output = fault.print();
+			Fault<?> output = fault.print();
 			// Assert
 			Assertions.assertSame( fault, output );
 			Assertions.assertEquals( TO_STRING_TEMPLATE.formatted( type, message ) + "\n", buffer.toString() );
@@ -122,15 +121,15 @@ class FaultTest {
 	class print_stream {
 
 		@Test
-		void $happyPath() {
+		void happyPath() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			PrintStream stream = new PrintStream( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			// Act
-			Fault output = fault.print( stream );
+			Fault<?> output = fault.print( stream );
 			// Assert
 			Assertions.assertSame( fault, output );
 			Assertions.assertEquals( TO_STRING_TEMPLATE.formatted( type, message ) + "\n", buffer.toString() );
@@ -139,7 +138,7 @@ class FaultTest {
 		@Test
 		void stream_null() {
 			// Arrange
-			Fault fault = new Fault( randomType(), randomString() );
+			Fault<?> fault = new Fault<>( randomType(), randomString() );
 			// Act
 			try {
 				fault.print( null );
@@ -166,16 +165,16 @@ class FaultTest {
 		}
 
 		@Test
-		void $happyPath() {
+		void happyPath() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			Standard.err.override( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
 			Throwable error = newThrowable( type, message );
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			// Act
-			Fault output = fault.validate( error );
+			Fault<?> output = fault.validate( error );
 			// Assert
 			Assertions.assertSame( fault, output );
 			Assertions.assertEquals( "", buffer.toString() );
@@ -185,7 +184,7 @@ class FaultTest {
 		@Test
 		void error_null() {
 			// Arrange
-			Fault fault = new Fault( randomType(), randomString() );
+			Fault<?> fault = new Fault<>( randomType(), randomString() );
 			// Act
 			try {
 				fault.validate( null );
@@ -201,13 +200,13 @@ class FaultTest {
 		}
 
 		@Test
-		void $error_badType() {
+		void error_badType() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			Standard.err.override( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			Class<? extends Throwable> badType = randomType( type );
 			Throwable badError = newThrowable( badType, message );
 			// Act
@@ -232,13 +231,13 @@ class FaultTest {
 		}
 
 		@Test
-		void $error_wrongMessage() {
+		void error_wrongMessage() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			Standard.err.override( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			String badMessage = randomString();
 			Throwable error = newThrowable( type, badMessage );
 			// Act
@@ -268,16 +267,16 @@ class FaultTest {
 	class validate_Throwable_PrintStream {
 
 		@Test
-		void $happyPath() {
+		void happyPath() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			PrintStream stream = new PrintStream( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
 			Throwable error = newThrowable( type, message );
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			// Act
-			Fault output = fault.validate( error, stream );
+			Fault<?> output = fault.validate( error, stream );
 			// Assert
 			Assertions.assertSame( fault, output );
 			Assertions.assertEquals( "", buffer.toString() );
@@ -288,7 +287,7 @@ class FaultTest {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			PrintStream stream = new PrintStream( buffer );
-			Fault fault = new Fault( randomType(), randomString() );
+			Fault<?> fault = new Fault<>( randomType(), randomString() );
 			// Act
 			try {
 				fault.validate( null, stream );
@@ -308,7 +307,7 @@ class FaultTest {
 			// Arrange
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			Throwable error = newThrowable( type, message );
 			// Act
 			try {
@@ -325,13 +324,13 @@ class FaultTest {
 		}
 
 		@Test
-		void $error_badType() {
+		void error_badType() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			PrintStream stream = new PrintStream( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			Class<? extends Throwable> badType = randomType( type );
 			Throwable badError = newThrowable( badType, message );
 			// Act
@@ -353,13 +352,13 @@ class FaultTest {
 		}
 
 		@Test
-		void $error_wrongMessage() {
+		void error_wrongMessage() {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			PrintStream stream = new PrintStream( buffer );
 			Class<? extends Throwable> type = randomType();
 			String message = randomString();
-			Fault fault = new Fault( type, message );
+			Fault<?> fault = new Fault<>( type, message );
 			String badMessage = randomString();
 			Throwable error = newThrowable( type, badMessage );
 			// Act
@@ -387,7 +386,7 @@ class FaultTest {
 		// Arrange
 		Class<? extends Throwable> type = randomType();
 		String message = randomString();
-		Fault fault = new Fault( type, message );
+		Fault<?> fault = new Fault<>( type, message );
 		// Act
 		String output = fault.toString();
 		// Assert
