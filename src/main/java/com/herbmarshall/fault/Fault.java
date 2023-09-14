@@ -3,6 +3,8 @@ package com.herbmarshall.fault;
 import com.herbmarshall.standardPipe.Standard;
 
 import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 /**
@@ -12,6 +14,9 @@ import java.util.Objects;
 public final class Fault<E extends Throwable> {
 
 	static final String TO_STRING_TEMPLATE = "(%s) %s";
+
+	static final String CONSTRUCTOR_LOCATION_FAILURE_TEMPLATE = "%s does not have expected constructor";
+	static final String INSTANTIATION_FAILURE_TEMPLATE = "Could not create instance of %s";
 
 	private final Class<E> type;
 	private final String message;
@@ -30,6 +35,48 @@ public final class Fault<E extends Throwable> {
 	/** @return the generated error message. */
 	public String getMessage() {
 		return message;
+	}
+
+	/**
+	 * Create a new instance of the {@link Throwable} {@code E}.
+	 * @throws UnsupportedOperationException if there are any problems while instantiating an {@code E}
+	 * @return A new instance of {@code E}
+	 */
+	public E build() {
+		return createInstance( getConstructor( String.class ), message );
+	}
+
+	/**
+	 * Create a new instance of the {@link Throwable} {@code E}.
+	 * @param cause The cause of the {@link Throwable} to build
+	 * @throws UnsupportedOperationException if there are any problems while instantiating an {@code E}
+	 * @return A new instance of {@code E}
+	 * @see Constructor#newInstance(Object...)
+	 */
+	public E build( Throwable cause ) {
+		return createInstance(
+			getConstructor( String.class, Throwable.class ),
+			message,
+			requireNonNull( cause, "cause" )
+		);
+	}
+
+	private E createInstance( Constructor<E> constructor, Object... args ) {
+		try {
+			return constructor.newInstance( args );
+		}
+		catch ( InstantiationException | IllegalAccessException | InvocationTargetException e ) {
+			throw new UnsupportedOperationException( INSTANTIATION_FAILURE_TEMPLATE.formatted( type ), e );
+		}
+	}
+
+	private Constructor<E> getConstructor( Class<?>... classes ) {
+		try {
+			return type.getConstructor( classes );
+		}
+		catch ( NoSuchMethodException e ) {
+			throw new UnsupportedOperationException( CONSTRUCTOR_LOCATION_FAILURE_TEMPLATE.formatted( type ), e );
+		}
 	}
 
 	/**
