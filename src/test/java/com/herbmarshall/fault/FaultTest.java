@@ -674,6 +674,153 @@ class FaultTest {
 		);
 	}
 
+	@Nested
+	class equals {
+
+		@Test
+		void happyPath() {
+			// Arrange
+			Class<? extends Throwable> type = randomType();
+			String message = randomString();
+			Fault<?> faultA = new Fault<>( type, message );
+			Fault<?> faultB = new Fault<>( type, message );
+			// Act
+			boolean output = faultA.equals( faultB );
+			// Assert
+			Assertions.assertTrue( output );
+		}
+
+		@Test
+		@SuppressWarnings( { "ConstantConditions", "UnnecessaryLocalVariable" } )
+		void other_same() {
+			// Arrange
+			Fault<?> faultA = new Fault<>( randomType(), randomString() );
+			Fault<?> faultB = faultA;
+			// Act
+			boolean output = faultA.equals( faultB );
+			// Assert
+			Assertions.assertTrue( output );
+		}
+
+		@Test
+		@SuppressWarnings( "ConstantConditions" )
+		void other_null() {
+			// Arrange
+			Fault<?> fault = new Fault<>( randomType(), randomString() );
+			// Act
+			boolean output = fault.equals( null );
+			// Assert
+			Assertions.assertFalse( output );
+		}
+
+		@Test
+		@SuppressWarnings( "EqualsBetweenInconvertibleTypes" )
+		void other_wrongType() {
+			// Arrange
+			Fault<?> faultA = new Fault<>( randomType(), randomString() );
+			String faultB = randomString();
+			// Act
+			boolean output = faultA.equals( faultB );
+			// Assert
+			Assertions.assertFalse( output );
+		}
+
+		@Test
+		void type_different() {
+			// Arrange
+			Class<? extends Throwable> type = randomType();
+			String message = randomString();
+			Fault<?> faultA = new Fault<>( type, message );
+			Fault<?> faultB = new Fault<>(
+				randomType( type ),
+				message
+			);
+			// Act
+			boolean output = faultA.equals( faultB );
+			// Assert
+			Assertions.assertFalse( output );
+		}
+
+		@Test
+		void message_different() {
+			// Arrange
+			Class<? extends Throwable> type = randomType();
+			String message = randomString();
+			Fault<?> faultA = new Fault<>( type, message );
+			Fault<?> faultB = new Fault<>(
+				type,
+				randomString( message )
+			);
+			// Act
+			boolean output = faultA.equals( faultB );
+			// Assert
+			Assertions.assertFalse( output );
+		}
+
+	}
+
+	@Nested
+	class hashCode {
+
+		@Test
+		void happyPath() {
+			// Arrange
+			Class<? extends Throwable> type = randomType();
+			String message = randomString();
+			Fault<?> faultA = new Fault<>( type, message );
+			Fault<?> faultB = new Fault<>( type, message );
+			// Act
+			boolean output = faultA.hashCode() == faultB.hashCode();
+			// Assert
+			Assertions.assertTrue( output );
+		}
+
+		@Test
+		@SuppressWarnings( "UnnecessaryLocalVariable" )
+		void other_same() {
+			// Arrange
+			Fault<?> faultA = new Fault<>( randomType(), randomString() );
+			Fault<?> faultB = faultA;
+			// Act
+			boolean output = faultA.hashCode() == faultB.hashCode();
+			// Assert
+			Assertions.assertTrue( output );
+		}
+
+		@Test
+		void type_different() {
+			// Arrange
+			Class<? extends Throwable> type = randomType();
+			String message = randomString();
+			Fault<?> faultA = new Fault<>( type, message );
+			Fault<?> faultB = new Fault<>(
+				randomType( type ),
+				message
+			);
+			// Act
+			boolean output = faultA.hashCode() == faultB.hashCode();
+			// Assert
+			Assertions.assertFalse( output );
+		}
+
+		@Test
+		void message_different() {
+			// Arrange
+			Class<? extends Throwable> type = randomType();
+			String message = randomString();
+			Fault<?> faultA = new Fault<>( type, message );
+			Fault<?> faultB = new Fault<>(
+				type,
+				randomString( message )
+			);
+			// Act
+			boolean output = faultA.hashCode() == faultB.hashCode();
+			// Assert
+			Assertions.assertFalse( output );
+		}
+
+	}
+
 	private String getStackTrace( Throwable e ) {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		e.printStackTrace( new PrintStream( buffer ) );
@@ -710,6 +857,15 @@ class FaultTest {
 
 	private String randomString() {
 		return UUID.randomUUID().toString();
+	}
+
+	private String randomString( String exclude ) {
+		int count = 0;
+		while ( count++ < MAX_RANDOM_ATTEMPTS ) {
+			String string = randomString();
+			if ( ! string.equals( exclude ) ) return string;
+		}
+		throw new IllegalStateException( "Could not find String not equal to '" + exclude + "'" );
 	}
 
 	private record ThrowableConstructor<E extends Throwable>(

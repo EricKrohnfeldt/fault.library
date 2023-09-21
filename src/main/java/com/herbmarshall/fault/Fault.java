@@ -144,6 +144,19 @@ public final class Fault<E extends Throwable> {
 		return TO_STRING_TEMPLATE.formatted( type, message );
 	}
 
+	@Override
+	public boolean equals( Object other ) {
+		if ( this == other ) return true;
+		if ( other == null || getClass() != other.getClass() ) return false;
+		Fault<?> fault = ( Fault<?> ) other;
+		return type.equals( fault.type ) && message.equals( fault.message );
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash( type, message );
+	}
+
 	private <T> T requireNonNull( T value, String name ) {
 		return Objects.requireNonNull( value, nullPointerError( name ) );
 	}

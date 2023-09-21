@@ -20,8 +20,9 @@
 	<properties>
 
 		<util.major>   1   </util.major>
+		<standardOut.minor>   5   </standardOut.minor>
 
-		<standardOut.version>   ${util.major}.5   </standardOut.version>
+		<standardOut.version>   ${util.major}.${standardOut.minor}   </standardOut.version>
 
 		<junit.version>   5.9.3   </junit.version>
 
