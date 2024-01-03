@@ -24,8 +24,6 @@
 
 		<standardOut.version>   ${util.major}.${standardOut.minor}   </standardOut.version>
 
-		<junit.version>   5.9.3   </junit.version>
-
 	</properties>
 
 	<dependencies>
@@ -34,13 +32,6 @@
 			<groupId>com.herbmarshall</groupId>
 			<artifactId>standardOut.library</artifactId>
 			<version>${standardOut.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
