@@ -14,4 +14,4 @@ docker run -it --rm \
 	-v "${CURRENT_DIR}":"${WORK_DIR}" \
 	-w "${WORK_DIR}" \
 	docker.herb.herbmarshall.com/maven.herb \
-	mvn clean install
+	mvn clean install javadoc:javadoc
