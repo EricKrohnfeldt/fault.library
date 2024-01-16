@@ -82,7 +82,7 @@ pipeline {
                 }
                 sh "echo ${artifactName} [ ${artifactVersion} ]"
                 sh 'rm -rf javadoc.info* || true'
-                sh 'mvn clean javadoc:javadoc'
+                sh 'mvn clean package javadoc:javadoc'
 				sshagent( [ 'KirbyGitKey' ] ) {
 					sh 'git clone git@git.herb.herbmarshall.com:repository/util/javadoc.info'
 					dir('javadoc.info') {
