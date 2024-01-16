@@ -107,5 +107,3 @@ pipeline {
 		DOCKER_CREDS = 'Nexus'
 	}
 }
-                        sh "mkdir -p site/${artifactName}"
-                        sh "cp -r ../target/site/apidocs site/${artifactName}/${artifactVersion}"
