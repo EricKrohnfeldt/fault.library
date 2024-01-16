@@ -56,7 +56,7 @@ elif [[ "docs" == "${OPERATION}" ]]; then
     echo
     echo Processing: "${ARTIFACT} [ ${VERSION} ]   ->   ${TARGET}"
     mkdir -p "${DEST}/${ARTIFACT}/${VERSION}"
-    cp -r "${DOC_DIR}/apidocs" "${TARGET}"
+    cp -r "${DOC_DIR}/*" "${TARGET}"
     echo 'Complete'
     cd "${WORK_DIR}"
   done
