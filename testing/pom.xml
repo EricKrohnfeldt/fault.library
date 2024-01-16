@@ -9,18 +9,38 @@
 
 	<parent>
 		<groupId>com.herbmarshall</groupId>
-		<artifactId>LibraryParent</artifactId>
-		<version>   1.14   </version>
+		<artifactId>fault.parent</artifactId>
+		<version>1.10-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>fault.parent</artifactId>
+	<artifactId>fault.testing</artifactId>
 	<version>1.10-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
-    <modules>
-        <module>library</module>
-        <module>testing</module>
-    </modules>
+	<properties>
+
+		<util.major>   1   </util.major>
+		<standardOut.minor>   5   </standardOut.minor>
+
+		<standardOut.version>   ${util.major}.${standardOut.minor}   </standardOut.version>
+
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.herbmarshall</groupId>
+			<artifactId>fault.library</artifactId>
+			<version>1.10-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
+
+	</dependencies>
 
 	<repositories>
 		<repository>
