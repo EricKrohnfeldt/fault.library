@@ -9,7 +9,7 @@
 
 	<parent>
 		<groupId>com.herbmarshall</groupId>
-		<artifactId>fault.parent</artifactId>
+		<artifactId>fault.pom</artifactId>
 		<version>1.11-SNAPSHOT</version>
 	</parent>
 
