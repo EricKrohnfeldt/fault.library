@@ -8,14 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static com.herbmarshall.fault.Fault.*;
+import static com.herbmarshall.fault.Fault.TO_STRING_TEMPLATE;
 
 class FaultTest {
 
@@ -46,6 +45,10 @@ class FaultTest {
 		IllegalStateException.class, new ThrowableConstructor<>(
 			IllegalStateException::new,
 			IllegalStateException::new
+		),
+		AssertionError.class, new ThrowableConstructor<>(
+			AssertionError::new,
+			AssertionError::new
 		)
 	);
 
@@ -112,15 +115,15 @@ class FaultTest {
 	}
 
 	@Nested
-	class build_noArg {
+	class build {
 
 		@Test
-		void happyPath() {
-			exceptions.keySet().forEach( this::happyPath );
+		void noArg() {
+			exceptions.keySet().forEach( this::noArg );
 		}
 
 		@SuppressWarnings( "unchecked" )
-		private <E extends Throwable> void happyPath( Class<E> type ) {
+		private <E extends Throwable> void noArg( Class<E> type ) {
 			Standard.out.println( "Testing type " + type );
 			// Arrange
 			String message = randomString();
@@ -133,109 +136,12 @@ class FaultTest {
 		}
 
 		@Test
-		void error_noMatchingConstructor() {
-			// Arrange
-			String message = randomString();
-			Fault<NoConstructor> fault = new Fault<>( NoConstructor.class, message );
-			// Act
-			try {
-				fault.build();
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					CONSTRUCTOR_LOCATION_FAILURE_TEMPLATE.formatted( NoConstructor.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					NoSuchMethodException.class,
-					e.getCause().getClass()
-				);
-			}
-		}
-
-		@Test
-		void error_inaccessibleConstructor() {
-			// Arrange
-			String message = randomString();
-			Fault<InaccessibleConstructor> fault = new Fault<>( InaccessibleConstructor.class, message );
-			// Act
-			try {
-				fault.build();
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					CONSTRUCTOR_LOCATION_FAILURE_TEMPLATE.formatted( InaccessibleConstructor.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					NoSuchMethodException.class,
-					e.getCause().getClass()
-				);
-			}
-		}
-
-		@Test
-		void error_constructorException() {
-			// Arrange
-			String message = randomString();
-			Fault<FailingConstructor> fault = new Fault<>( FailingConstructor.class, message );
-			// Act
-			try {
-				fault.build();
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					INSTANTIATION_FAILURE_TEMPLATE.formatted( FailingConstructor.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					InvocationTargetException.class,
-					e.getCause().getClass()
-				);
-			}
-		}
-
-		@Test
-		void error_abstractClass() {
-			// Arrange
-			String message = randomString();
-			Fault<AbstractException> fault = new Fault<>( AbstractException.class, message );
-			// Act
-			try {
-				fault.build();
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					INSTANTIATION_FAILURE_TEMPLATE.formatted( AbstractException.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					InstantiationException.class,
-					e.getCause().getClass()
-				);
-			}
-		}
-
-	}
-
-	@Nested
-	class build_Throwable {
-
-		@Test
-		void happyPath() {
-			exceptions.keySet().forEach( this::happyPath );
+		void throwable() {
+			exceptions.keySet().forEach( this::throwable );
 		}
 
 		@SuppressWarnings( "unchecked" )
-		private <E extends Throwable> void happyPath( Class<E> type ) {
+		private <E extends Throwable> void throwable( Class<E> type ) {
 			Standard.out.println( "Testing type " + type );
 			// Arrange
 			String message = randomString();
@@ -267,102 +173,6 @@ class FaultTest {
 				Assertions.assertEquals(
 					Fault.nullPointerError( "cause" ),
 					e.getMessage()
-				);
-			}
-		}
-
-		@Test
-		void error_noMatchingConstructor() {
-			// Arrange
-			String message = randomString();
-			Fault<NoConstructor> fault = new Fault<>( NoConstructor.class, message );
-			Exception cause = new Exception();
-			// Act
-			try {
-				fault.build( cause );
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					CONSTRUCTOR_LOCATION_FAILURE_TEMPLATE.formatted( NoConstructor.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					NoSuchMethodException.class,
-					e.getCause().getClass()
-				);
-			}
-		}
-
-		@Test
-		void error_inaccessibleConstructor() {
-			// Arrange
-			String message = randomString();
-			Fault<InaccessibleConstructor> fault = new Fault<>( InaccessibleConstructor.class, message );
-			Exception cause = new Exception();
-			// Act
-			try {
-				fault.build( cause );
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					CONSTRUCTOR_LOCATION_FAILURE_TEMPLATE.formatted( InaccessibleConstructor.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					NoSuchMethodException.class,
-					e.getCause().getClass()
-				);
-			}
-		}
-
-		@Test
-		void error_constructorException() {
-			// Arrange
-			String message = randomString();
-			Fault<FailingConstructor> fault = new Fault<>( FailingConstructor.class, message );
-			Exception cause = new Exception();
-			// Act
-			try {
-				fault.build( cause );
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					INSTANTIATION_FAILURE_TEMPLATE.formatted( FailingConstructor.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					InvocationTargetException.class,
-					e.getCause().getClass()
-				);
-			}
-		}
-
-		@Test
-		void error_abstractClass() {
-			// Arrange
-			String message = randomString();
-			Fault<AbstractException> fault = new Fault<>( AbstractException.class, message );
-			Exception cause = new Exception();
-			// Act
-			try {
-				fault.build( cause );
-				Assertions.fail();
-			}
-			// Assert
-			catch ( UnsupportedOperationException e ) {
-				Assertions.assertEquals(
-					INSTANTIATION_FAILURE_TEMPLATE.formatted( AbstractException.class ),
-					e.getMessage()
-				);
-				Assertions.assertEquals(
-					InstantiationException.class,
-					e.getCause().getClass()
 				);
 			}
 		}
@@ -872,37 +682,5 @@ class FaultTest {
 		Function<String, E> message,
 		BiFunction<String, Throwable, E> caused
 	) {}
-
-	public static class NoConstructor extends Exception {}
-
-	@SuppressWarnings( "unused" )
-	public static final class InaccessibleConstructor extends Exception {
-		private InaccessibleConstructor( String message ) {
-			super( message );
-		}
-		private InaccessibleConstructor( String message, Throwable cause ) {
-			super( message, cause );
-		}
-	}
-
-	@SuppressWarnings( { "unused", "checkstyle:RedundantModifier" } )
-	public abstract static class AbstractException extends Exception {
-		public AbstractException( String message ) {
-			super( message );
-		}
-		public AbstractException( String message, Throwable cause ) {
-			super( message, cause );
-		}
-	}
-
-	@SuppressWarnings( { "unused", "checkstyle:RedundantModifier" } )
-	public static class FailingConstructor extends Exception {
-		public FailingConstructor( String message ) {
-			throw new RuntimeException( "Expected Failure" );
-		}
-		public FailingConstructor( String message, Throwable cause ) {
-			throw new RuntimeException( "Expected Failure" );
-		}
-	}
 
 }

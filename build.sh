@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 #Using non-cdlocal because may be ran by jenkins
 cd "$( dirname "$( realpath "$( readlink -f "$0" )" )" )"
