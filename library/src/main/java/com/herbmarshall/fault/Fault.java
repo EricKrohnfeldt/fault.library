@@ -146,15 +146,15 @@ public final class Fault<E extends Throwable> {
 	}
 
 	static String typeError( Class<? extends Throwable> expected, Class<? extends Throwable> actual ) {
-		return "Incorrect error type; expected " + expected + " but received " + actual;
+		return "Incorrect error type; expected '" + expected + "' but received '" + actual + "'";
 	}
 
 	static String messageError( String expected, String actual ) {
-		return "Incorrect error message; expected " + expected + " but received " + actual;
+		return "Incorrect error message; expected '" + expected + "' but received '" + actual + "'";
 	}
 
 	static String nullPointerError( String parameterName ) {
-		return "Value of " + parameterName + " cannot be null";
+		return "Value of '" + parameterName + "' cannot be null";
 	}
 
 }
