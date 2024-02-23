@@ -2,6 +2,7 @@ package com.herbmarshall.fault;
 
 import com.herbmarshall.standardPipe.Standard;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.Objects;
@@ -76,8 +77,8 @@ public final class Fault<E extends Throwable> {
 	 * @return Self reference
 	 * @throws NullPointerException if {@code stream} is null.
 	 */
-	public Fault<E> print( PrintStream stream ) {
-		requireNonNull( stream, "stream" ).println( this );
+	public Fault<E> print( OutputStream stream ) {
+		new PrintStream( requireNonNull( stream, "stream" ) ).println( this );
 		return this;
 	}
 
@@ -99,7 +100,7 @@ public final class Fault<E extends Throwable> {
 	 * @throws AssertionError if either type or message do not match
 	 * @throws NullPointerException if either {@code error} or {@code stream} are null.
 	 */
-	public Fault<E> validate( Throwable error, PrintStream stream ) {
+	public Fault<E> validate( Throwable error, OutputStream stream ) {
 		requireNonNull( error, "error" );
 		requireNonNull( stream, "stream" );
 		try {
@@ -107,7 +108,7 @@ public final class Fault<E extends Throwable> {
 			validateMessage( error );
 		}
 		catch ( AssertionError e ) {
-			error.printStackTrace( stream );
+			error.printStackTrace( new PrintStream( stream ) );
 			throw e;
 		}
 		return this;

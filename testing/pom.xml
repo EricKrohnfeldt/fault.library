@@ -20,6 +20,7 @@
 	<properties>
 
 		<util.major>   1   </util.major>
+
 		<standardOut.minor>   5   </standardOut.minor>
 
 		<standardOut.version>   ${util.major}.${standardOut.minor}   </standardOut.version>
@@ -29,15 +30,9 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>com.herbmarshall</groupId>
-			<artifactId>fault.library</artifactId>
-			<version>1.14-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>${junit.version}</version>
+			<groupId>    com.herbmarshall   </groupId>
+			<artifactId>    fault.library   </artifactId>
+			<version>       1.14-SNAPSHOT   </version>
 		</dependency>
 
 	</dependencies>

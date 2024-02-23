@@ -20,7 +20,8 @@
 	<properties>
 
 		<util.major>   1   </util.major>
-		<standardOut.minor>   5   </standardOut.minor>
+
+		<standardOut.minor>   9   </standardOut.minor>
 
 		<standardOut.version>   ${util.major}.${standardOut.minor}   </standardOut.version>
 
@@ -29,9 +30,9 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>com.herbmarshall</groupId>
-			<artifactId>standardOut.library</artifactId>
-			<version>${standardOut.version}</version>
+			<groupId>         com.herbmarshall   </groupId>
+			<artifactId>   standardOut.library   </artifactId>
+			<version>   ${standardOut.version}   </version>
 		</dependency>
 
 	</dependencies>
