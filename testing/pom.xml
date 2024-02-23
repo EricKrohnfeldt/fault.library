@@ -4,17 +4,17 @@
 
 	<scm>
 		<developerConnection>scm:git:ssh://git.herb.herbmarshall.com/repository/util/fault.library</developerConnection>
-		<tag>HEAD</tag>
+		<tag>fault.pom-1.14</tag>
 	</scm>
 
 	<parent>
 		<groupId>com.herbmarshall</groupId>
 		<artifactId>fault.pom</artifactId>
-		<version>1.14-SNAPSHOT</version>
+		<version>1.14</version>
 	</parent>
 
 	<artifactId>fault.testing</artifactId>
-	<version>1.14-SNAPSHOT</version>
+	<version>1.14</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>    com.herbmarshall   </groupId>
 			<artifactId>    fault.library   </artifactId>
-			<version>       1.14-SNAPSHOT   </version>
+			<version>       1.14   </version>
 		</dependency>
 
 	</dependencies>
