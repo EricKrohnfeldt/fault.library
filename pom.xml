@@ -8,9 +8,9 @@
 	</scm>
 
 	<parent>
-		<groupId>com.herbmarshall</groupId>
-		<artifactId>LibraryParent</artifactId>
-		<version>   1.14   </version>
+		<groupId>      com.herbmarshall   </groupId>
+		<artifactId>      LibraryParent   </artifactId>
+		<version>                  1.15   </version>
 	</parent>
 
 	<artifactId>fault.pom</artifactId>
@@ -18,7 +18,7 @@
 	<packaging>pom</packaging>
 
     <modules>
-        <module>library</module>
+    	<module>library</module>
         <module>testing</module>
     </modules>
 

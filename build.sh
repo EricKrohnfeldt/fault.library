@@ -8,20 +8,43 @@ cd "$( dirname "$( realpath "$( readlink -f "$0" )" )" )"
 OPERATION='build'
 DEST=
 BUILD_DIR=$( pwd )
+SKIP_CHECKS=
+SKIP_TESTS=
+
+printUsage() {
+  echo 'Options:'
+  echo '   --docs          Run build javadoc operation'
+  echo '   -c --noChecks   Ignore run checkstyle'
+  echo '   -t --noTests    Dont run unit tests ( or coverage )'
+  echo '   -x              Both --noChecks and --noTests'
+}
 
 while test $# -gt 0
 do
 		case "$1" in
+		  -\?)
+		    printUsage
+		    exit 1
+		    ;;
 			--docs)
 				OPERATION='docs'
 				;;
+		  -c|--noChecks)
+		    SKIP_CHECKS='-Dcheckstyle.skip=true'
+		    ;;
+		  -t|--noTests)
+		    SKIP_TESTS='-Dmaven.test.skip.exec'
+		    ;;
+		  -x)
+		    SKIP_CHECKS='-Dcheckstyle.skip=true'
+		    SKIP_TESTS='-Dmaven.test.skip.exec'
+		    ;;
 			*)
 				DEST="$1"
 				;;
 		esac
 		shift
 done
-
 
 
 if [[ "build" == "${OPERATION}" ]]; then
@@ -35,7 +58,7 @@ if [[ "build" == "${OPERATION}" ]]; then
     -v "${BUILD_DIR}":"${WORK_DIR}" \
     -w "${WORK_DIR}" \
     docker.herb.herbmarshall.com/maven.herb \
-    mvn clean install javadoc:javadoc
+    mvn clean install javadoc:javadoc ${SKIP_CHECKS} ${SKIP_TESTS}
 
 elif [[ "docs" == "${OPERATION}" ]]; then
 
