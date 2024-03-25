@@ -306,13 +306,16 @@ class FaultTest {
 		}
 
 		@Test
-		void error_wrongMessage() {
+		void wrongMessage() {
+			wrongMessage( randomType(), randomString() );
+			wrongMessage( randomType(), null           );
+		}
+
+		private void wrongMessage( Class<? extends Throwable> type, String badMessage ) {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-			Class<? extends Throwable> type = randomType();
 			String message = randomString();
 			Fault<?> fault = new Fault<>( type, message );
-			String badMessage = randomString();
 			Throwable error = newThrowable( type, badMessage );
 			OverridePlan override = Standard.err.withOverride( buffer );
 			// Act
@@ -426,14 +429,17 @@ class FaultTest {
 		}
 
 		@Test
-		void error_wrongMessage() {
+		void wrongMessage() {
+			wrongMessage( randomType(), randomString() );
+			wrongMessage( randomType(), null           );
+		}
+
+		private void wrongMessage( Class<? extends Throwable> type, String badMessage ) {
 			// Arrange
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			PrintStream stream = new PrintStream( buffer );
-			Class<? extends Throwable> type = randomType();
 			String message = randomString();
 			Fault<?> fault = new Fault<>( type, message );
-			String badMessage = randomString();
 			Throwable error = newThrowable( type, badMessage );
 			// Act
 			try {
@@ -626,6 +632,11 @@ class FaultTest {
 	@SuppressWarnings( "unchecked" )
 	private <E extends Throwable> E newThrowable( Class<E> type, String message ) {
 		return ( E ) exceptions.get( type ).message.apply( message );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private <E extends Throwable> E newThrowable( Class<E> type ) {
+		return ( E ) exceptions.get( type ).message.apply( null );
 	}
 
 	private Class<? extends Throwable> randomType() {

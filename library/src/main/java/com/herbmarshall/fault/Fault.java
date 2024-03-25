@@ -120,7 +120,7 @@ public final class Fault<E extends Throwable> {
 	}
 
 	private void validateMessage( Throwable throwable ) {
-		if ( throwable.getMessage().equals( message ) ) return;
+		if ( message.equals( throwable.getMessage() ) ) return;
 		throw new AssertionError( messageError( message, throwable.getMessage() ) );
 	}
 
