@@ -2,6 +2,13 @@ def releaseCandidate = false;
 pipeline {
 	agent none
 	stages {
+		stage('Clean Workspace') {
+			when { beforeAgent true; not { branch pattern: 'master(-\\d+)?', comparator: 'REGEXP' } }
+			agent { docker { image env.DOCKER_IMAGE; args env.DOCKER_ARGS; registryUrl env.DOCKER_URL; registryCredentialsId env.DOCKER_CREDS } }
+			steps {
+				cleanWs()
+		  	}
+		}
 		stage( 'Deploy Snapshot' ) {
 			when { beforeAgent true; not { branch pattern: 'master(-\\d+)?', comparator: 'REGEXP' } }
 			agent { docker { image env.DOCKER_IMAGE; args env.DOCKER_ARGS; registryUrl env.DOCKER_URL; registryCredentialsId env.DOCKER_CREDS } }
@@ -60,7 +67,7 @@ pipeline {
 					sh 'git reset --hard origin/master'
 					sh "git merge --ff-only jenkins_${BUILD_NUMBER}"
 					sh 'mvn release:prepare release:perform --batch-mode'
-                }
+				}
 			}
 		}
 		stage( 'Deploy JavaDoc' ) {
@@ -68,34 +75,34 @@ pipeline {
 			agent { docker { image env.DOCKER_IMAGE; args env.DOCKER_ARGS; registryUrl env.DOCKER_URL; registryCredentialsId env.DOCKER_CREDS } }
 			steps {
 				milestone 4
-                script {
-                    artifactName = sh(
-                        script: "mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout",
-                        returnStdout: true
-                    ).trim()
-                }
-                script {
-                    artifactVersion = sh(
-                        script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout",
-                        returnStdout: true
-                    ).trim().minus( '-SNAPSHOT' )
-                }
-                sh "echo ${artifactName} [ ${artifactVersion} ]"
-                sh 'rm -rf javadoc.info* || true'
-                sh 'mvn clean package javadoc:javadoc'
+				script {
+					artifactName = sh(
+						script: "mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout",
+						returnStdout: true
+					).trim()
+				}
+				script {
+					artifactVersion = sh(
+						script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout",
+						returnStdout: true
+					).trim().minus( '-SNAPSHOT' )
+				}
+				sh "echo ${artifactName} [ ${artifactVersion} ]"
+				sh 'rm -rf javadoc.info* || true'
+				sh 'mvn clean package javadoc:javadoc'
 				sshagent( [ 'KirbyGitKey' ] ) {
 					sh 'git clone git@git.herb.herbmarshall.com:repository/util/javadoc.info'
 					dir('javadoc.info') {
-                        sh 'git checkout work'
-                    }
+						sh 'git checkout work'
+					}
 				}
 				sh "./build.sh --docs javadoc.info/site"
 				sshagent( [ 'KirbyGitKey' ] ) {
 					dir('javadoc.info') {
-                        sh "git add site"
-                        sh "git commit -m \"Add ${artifactName} ${artifactVersion} docs\""
-                        sh 'git push'
-                    }
+						sh "git add site"
+						sh "git commit -m \"Add ${artifactName} ${artifactVersion} docs\""
+						sh 'git push'
+					}
 				}
 			}
 		}
