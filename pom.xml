@@ -4,7 +4,7 @@
 
 	<scm>
 		<developerConnection>scm:git:ssh://git.herb.herbmarshall.com/repository/util/fault.library</developerConnection>
-		<tag>fault.pom-1.17</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<parent>
@@ -14,7 +14,7 @@
 	</parent>
 
 	<artifactId>    fault.pom   </artifactId>
-	<version>   1.17   </version>
+	<version>   1.18-SNAPSHOT   </version>
 	<packaging>           pom   </packaging>
 
     <modules>
