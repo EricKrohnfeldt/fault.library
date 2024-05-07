@@ -9,24 +9,24 @@
 
 	<parent>
 		<groupId>      com.herbmarshall   </groupId>
-		<artifactId>      LibraryParent   </artifactId>
-		<version>                  1.15   </version>
+		<artifactId>        library.pom   </artifactId>
+		<version>                  1.17   </version>
 	</parent>
 
-	<artifactId>fault.pom</artifactId>
-	<version>1.17-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<artifactId>    fault.pom   </artifactId>
+	<version>   1.17-SNAPSHOT   </version>
+	<packaging>           pom   </packaging>
 
     <modules>
-    	<module>library</module>
-        <module>testing</module>
+        <module>         test   </module>
+    	<module>   production   </module>
     </modules>
 
 	<repositories>
 		<repository>
-			<id>Nexus</id>
-			<name>HerbMarshall Repository</name>
-			<url>https://nexus.herb.herbmarshall.com/repository/maven-public/</url>
+			<id>                                                            Nexus   </id>
+			<name>                                        HerbMarshall Repository   </name>
+			<url>    https://nexus.herb.herbmarshall.com/repository/maven-public/   </url>
 		</repository>
 	</repositories>
 
